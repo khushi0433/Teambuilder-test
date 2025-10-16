@@ -6,6 +6,8 @@ import getStripe from "../lib/getStripe";
 import { urlFor } from "../lib/client";
 import { UC } from "../app/context";
 import { ArrowLeft, Delete, Minus, Plus, ShoppingBag } from "./Svg";
+import { usdToYen } from "../lib/currency";
+import { checkOut } from "../lib/checkOut";
 
 const Cart = () => {
   // USE REF
@@ -21,25 +23,6 @@ const Cart = () => {
     onRemove,
   } = useContext(UC);
 
-  const checkOut = async () => {
-    const stripe = await getStripe();
-
-    const response = await fetch("/api/stripe", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cartItems),
-    });
-
-    if (response.statusCode === "500") return;
-
-    const data = await response.json();
-
-    toast.loading("Redirecting...");
-
-    stripe.redirectToCheckout({ sessionId: data.id });
-  };
   return (
     <div
       className=" bg-lightGray bg-opacity-50 w-full h-full 
@@ -103,7 +86,7 @@ const Cart = () => {
                       {item?.name}
                     </h4>
                     <h5 className=" text-xl text-secondary font-bold">
-                      ${item?.price}
+                      {usdToYen(item?.price)}
                     </h5>
                   </section>
 
@@ -153,7 +136,7 @@ const Cart = () => {
             <div className="flex flex-col items-center my-10 w-full">
               <section className=" w-full px-10 flex items-center justify-between">
                 <h2 className=" text-2xl font-semibold">Subtotal:</h2>
-                <span className=" text-xl font-bold"> ${totalPrice}</span>
+                <span className=" text-xl font-bold"> {usdToYen(totalPrice)}</span>
               </section>
 
               <button
