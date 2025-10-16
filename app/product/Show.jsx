@@ -5,6 +5,8 @@ import Marquee from "../../comps/Marquee";
 import { urlFor } from "../../lib/client";
 import { UC } from "../context";
 import { Minus, Plus, Star } from "../../comps/Svg";
+import { checkOut } from "../../lib/checkOut";
+import { usdToYen } from "../../lib/currency";
 
 const Show = ({ product, products }) => {
   console.log("show");
@@ -101,7 +103,7 @@ const Show = ({ product, products }) => {
               <div className=" text-secondary font-medium ">DETAILS:</div>
               <p className="w-2/3 text-lightGray"> {product.details}</p>
 
-              <div className=" my-4 text-2xl font-bold"> ${product.price} </div>
+              <div className=" my-4 text-2xl font-bold"> {usdToYen(product.price)} </div>
 
               {/* ==== QUANTITY SHOW  */}
               <div className="flex">
@@ -145,8 +147,13 @@ const Show = ({ product, products }) => {
               </button>
 
               <div
-                className=" text-center hover:scale-105 transition shadow-md cursor-pointer
-                 bg-primary text-xl px-8 py-2  text-highLight ring-1 ring-primary"
+                className="flex justify-center items-center mb-4 
+                sm:mb-0 hover:scale-105 transition
+                text-xl px-8 py-2 ring-1 ring-primary w-full sm:w-auto "
+                onClick={() => {
+                  const buyItem = [{ ...product, quantity: qty }];
+                  checkOut(buyItem);
+                }}
               >
                 Buy Now
               </div>
