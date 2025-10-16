@@ -10,12 +10,14 @@ const Marquee = ({ products }) => {
         You may also like
       </h1>
 
-      <section className=" mt-10 relative h-52 sm:h-96  w-full  overflow-hidden">
-        <div className={`flex  justify-center`}>
-          {products.map((product) => (
-            <Products gap={"mr-5"} key={product._id} products={product} />
-          ))}
-        </div>
+    {/* dupplicating the products so the sec set fills the gap */}
+      <section className="mt-10 relative h-52 sm:h-96 w-full overflow-hidden">
+  <div className={`flex ${styles.anim}`}>
+    {[...products, ...products].map((product, index) => (
+      <Products gap={"mr-5"} key={product._id + index} products={product} />
+    ))}
+  </div>
+
       </section>
     </div>
   );
